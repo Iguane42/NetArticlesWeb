@@ -9,7 +9,35 @@ package dao;
  *
  * @author Epulapp
  */
-class AchetePK {
+public class AchetePK {
     private int idClient;
     private int idArticle;
+
+    /**
+     * @return the idClient
+     */
+    public int getIdClient() {
+        return idClient;
+    }
+
+    /**
+     * @param idClient the idClient to set
+     */
+    public void setIdClient(int idClient) {
+        this.idClient = idClient;
+    }
+
+    /**
+     * @return the idArticle
+     */
+    public int getIdArticle() {
+        return idArticle;
+    }
+
+    /**
+     * @param idArticle the idArticle to set
+     */
+    public void setIdArticle(int idArticle) {
+        this.idArticle = idArticle;
+    }
 }

@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  *
  * @author Epulapp
  */
-class Droits {
+public class Droits {
     protected DroitsPK droitsPK;
     private Character etatDroits;
     private BigDecimal montantsDroits;

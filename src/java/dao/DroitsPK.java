@@ -11,7 +11,7 @@ import java.util.Date;
  *
  * @author Epulapp
  */
-class DroitsPK {
+public class DroitsPK {
     private int idAuteur;
     private Date dateTrimestre;
 }

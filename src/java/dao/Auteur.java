@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author Epulapp
  */
-class Auteur {
+public class Auteur {
     private Integer idAuteur;
     private String identiteAuteur;
     private String adresseAuteur;

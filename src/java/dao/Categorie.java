@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author Epulapp
  */
-class Categorie {
+public class Categorie {
     private Integer idCategorie;
     private String libcategorie;
     //private List<Client> clientList;

@@ -9,7 +9,7 @@ package dao;
  *
  * @author Epulapp
  */
-class Redige {
+public class Redige {
     protected RedigePK redigePK;
     private int part;
     private Article article;

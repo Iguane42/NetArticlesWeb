@@ -18,7 +18,7 @@ public class Client {
     private Integer credits;
     private String loginClient;
     private String pwdClient;
-    //private List<Achete> acheteList;
+    private List<Achete> acheteList;
     private Categorie categorie;
 
     /**
@@ -117,6 +117,20 @@ public class Client {
      */
     public void setCategorie(Categorie categorie) {
         this.categorie = categorie;
+    }
+
+    /**
+     * @return the acheteList
+     */
+    public List<Achete> getAcheteList() {
+        return acheteList;
+    }
+
+    /**
+     * @param acheteList the acheteList to set
+     */
+    public void setAcheteList(List<Achete> acheteList) {
+        this.acheteList = acheteList;
     }
     
 }

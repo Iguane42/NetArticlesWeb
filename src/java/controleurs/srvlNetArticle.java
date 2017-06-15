@@ -42,6 +42,8 @@ public class srvlNetArticle extends HttpServlet {
             demande = Utilitaire.getDemande(request);
             if (demande.equalsIgnoreCase("dernierArticle.na")) {
                 vueReponse = getLastArticle(request);
+            } else if (demande.equalsIgnoreCase("voirArticle.na")) {
+                vueReponse = getArticleId(request);
             }
         } catch (Exception e) {
             erreur = e.getMessage();
@@ -63,6 +65,20 @@ public class srvlNetArticle extends HttpServlet {
         if (reponse.getIdArticle() != null) {
             request.setAttribute("articleR", reponse);
             //request.setAttribute("id_domaineR", reponse.getDomaine().getIdDomaine());
+        } else {
+            erreur = "Aucun dernier article n'a été trouvé.";
+        }
+        return vueReponse;
+    }
+    
+    public String getArticleId(HttpServletRequest request) throws Exception 
+    {
+        ClientNetArticles cna = new ClientNetArticles();
+        Article reponse = cna.getArticleId(Article.class, request.getParameter("id_article"));
+        String vueReponse = "/voirArticle.jsp";
+        if (reponse.getIdArticle() != null) {
+            request.setAttribute("articleR", reponse);
+            request.setAttribute("id_domaineR", reponse.getDomaine().getIdDomaine());
         } else {
             erreur = "Aucun dernier article n'a été trouvé.";
         }

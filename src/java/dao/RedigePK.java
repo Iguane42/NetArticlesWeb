@@ -9,7 +9,7 @@ package dao;
  *
  * @author Epulapp
  */
-class RedigePK {
+public class RedigePK {
     private int idArticle;
     private int idAuteur;
 }
