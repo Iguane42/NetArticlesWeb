@@ -9,6 +9,7 @@ import Utilitaires.Utilitaire;
 import dao.Achete;
 import dao.AchetePK;
 import dao.Article;
+import dao.Auteur;
 import dao.Client;
 import dao.ClientBanque;
 import dao.Domaine;
@@ -25,6 +26,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import pkgProducteur.Emetteur;
 
 /**
  *
@@ -200,6 +202,7 @@ public class srvlCommande extends HttpServlet {
                 Integer montantint = (int)Math.round(montantTotal);
                 if (cb.autoriserPaiement(idUser.toString(),montantint.toString()))
                 {
+                    Emetteur emetteur = new Emetteur();
                     for(Article a : lArticle)
                     {
                         AchetePK apk = new AchetePK();
@@ -209,6 +212,11 @@ public class srvlCommande extends HttpServlet {
                         ac.setAchetePK(apk);
                         ac.setDateAchat(new Date());
                         cna.acheteArticle(ac);
+                        List<Auteur> auteurs = cna.getAuteursArticle(a.getIdArticle());
+                        for (Auteur auteur: auteurs)
+                        {
+                            emetteur.sendMessage(a.getTitre(), new Date(), auteur.getIdAuteur(), auteur.getIdentiteAuteur());
+                        }
                     }
                     session.setAttribute("panier", null);
                     vueReponse = listerPanier(request);
