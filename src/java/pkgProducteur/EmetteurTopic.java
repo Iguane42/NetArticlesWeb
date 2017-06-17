@@ -7,10 +7,11 @@ package pkgProducteur;
 
 import java.util.Date;
 import javax.annotation.Resource;
-import javax.jms.ConnectionFactory;
+import javax.ejb.Stateless;
 import javax.jms.MapMessage;
 import javax.jms.Topic;
 import javax.jms.TopicConnection;
+import javax.jms.TopicConnectionFactory;
 import javax.jms.TopicPublisher;
 import javax.jms.TopicSession;
 
@@ -18,27 +19,32 @@ import javax.jms.TopicSession;
  *
  * @author Epulapp
  */
-public class Emetteur {
+@Stateless
+public class EmetteurTopic {
+
     @Resource(mappedName = "FabriqueArticles")
-    private static ConnectionFactory fabriqueArticles;
+    public TopicConnectionFactory fabriqueArticles;
+    
     @Resource(mappedName = "jms/Articles")
-    private static Topic messagesArticles;
-    private static TopicConnection connection = null;
-    private static TopicSession session = null;
-    private static TopicPublisher producteur = null;
-    private static MapMessage mapMessage  = null;
+    public Topic messagesArticles;
+    
+    private TopicConnection connection = null;
+    private TopicSession session = null;
+    private TopicPublisher producteur = null;
+    
+    
     
     public void sendMessage(String titreArticle, Date date, int idAuteur, String identiteAuteur) throws Exception {
         try {
             connection = (TopicConnection) fabriqueArticles.createConnection();
             session = connection.createTopicSession(false, 0);
             producteur = session.createPublisher(messagesArticles);
-            mapMessage = session.createMapMessage();
+            MapMessage mapMessage = session.createMapMessage();
             mapMessage.setString("titre", titreArticle);
             mapMessage.setString("date", date.toString());
             mapMessage.setInt("id_auteur", idAuteur);
             mapMessage.setString("identite_auteur", identiteAuteur);
-            //producteur.send(mapMessage);
+            producteur.send(mapMessage);
             producteur.close();
         } catch (Exception ex) {
             throw ex;
