@@ -50,6 +50,18 @@ public class ClientNetArticles {
         }
         return r.readEntity(new GenericType<List<Domaine>>(){});
     }
+    
+    public List<Categorie> getCategories() throws ClientErrorException, Exception {
+        WebTarget resource = webTarget;
+        resource = resource.path("getCategories");
+        Response r = resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON + "; charset=UTF-8").get();
+        if (r.getStatus() != Response.Status.OK.getStatusCode()){
+            JsonObject jsonObject = Utilitaire.convertJson(r.readEntity(String.class));
+            String message = jsonObject.getString("message");
+            throw new Exception(message);
+        }
+        return r.readEntity(new GenericType<List<Categorie>>(){});
+    }
 
     public <T> T getArticles(Class<T> responseType) throws ClientErrorException {
         WebTarget resource = webTarget;
@@ -93,6 +105,19 @@ public class ClientNetArticles {
         }
         List<Achete> achats = r.readEntity(new GenericType<List<Achete>>(){});
         return achats;
+    }
+    
+    public dao.Client getClient(int id) throws ClientErrorException, Exception {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("getClient/{0}", new Object[]{id}));
+        Response r = resource.request(MediaType.APPLICATION_JSON + "; charset=UTF-8").get();
+        if (r.getStatus() != Response.Status.OK.getStatusCode()){
+            JsonObject jsonObject = Utilitaire.convertJson(r.readEntity(String.class));
+            String message = jsonObject.getString("message");
+            throw new Exception(message);
+        }
+        dao.Client cli = r.readEntity(new GenericType<dao.Client>(){});
+        return cli;
     }
 
     public <T> T getArticleId(Class<T> responseType, String id_article) throws ClientErrorException, Exception {
@@ -145,6 +170,30 @@ public class ClientNetArticles {
     
     public void close() {
         client.close();
+    }
+    
+    public void editerCompte(Object requestEntity) throws ClientErrorException, Exception {
+        WebTarget resource = webTarget;
+        resource = resource.path("editerCompte");
+        Response r = resource.request(MediaType.APPLICATION_JSON + "; charset=UTF-8").post(javax.ws.rs.client.Entity.entity(requestEntity, MediaType.APPLICATION_JSON + "; charset=UTF-8"), Response.class);
+        if (r.getStatus() != Response.Status.OK.getStatusCode()){
+            JsonObject jsonObject = Utilitaire.convertJson(r.readEntity(String.class));
+            String message = jsonObject.getString("message");
+            throw new Exception(message);
+        }
+        
+    }
+    
+    public Categorie getCategorie(int idCategorie) throws ClientErrorException, Exception {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("getCategorie/{0}", new Object[]{idCategorie}));
+        Response r = resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON + "; charset=UTF-8").get();
+        if (r.getStatus() != Response.Status.OK.getStatusCode()){
+            JsonObject jsonObject = Utilitaire.convertJson(r.readEntity(String.class));
+            String message = jsonObject.getString("message");
+            throw new Exception(message);
+        }
+        return r.readEntity(new GenericType<Categorie>(){});
     }
     
 }

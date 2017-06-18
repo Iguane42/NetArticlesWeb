@@ -6,10 +6,11 @@
 package controleurs;
 
 import Utilitaires.Utilitaire;
+import dao.Categorie;
 import dao.Client;
 import dao.ClientNetArticles;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -49,6 +50,10 @@ public class srvlCompte extends HttpServlet {
                 vueReponse = connecter(request);
             } else if (demande.equalsIgnoreCase("deconnecter.cpt")) {
                 vueReponse = deconnecter(request);
+            } else if (demande.equalsIgnoreCase("voirCompte.cpt") || demande.equalsIgnoreCase("creerCompte.cpt")) {
+                vueReponse = voirCompte(request);
+            } else if (demande.equalsIgnoreCase("validerCompte.cpt")) {
+                vueReponse = validerCompte(request);
             }
         } catch (Exception e) {
             erreur = e.getMessage();
@@ -91,6 +96,52 @@ public class srvlCompte extends HttpServlet {
             throw e;
         }
     } 
+    
+    private String voirCompte(HttpServletRequest request) throws Exception {
+        ClientNetArticles cna = new ClientNetArticles();
+        HttpSession session = request.getSession(true);
+        Client cli;
+        if (session.getAttribute("userId") != null)
+        {
+            cli = cna.getClient((int)session.getAttribute("userId"));
+            
+        } else {
+            cli = new Client();
+//            cli.setIdClient(0);
+//            cli.setAdresseClient("");
+//            Categorie cat = new Categorie();
+//            cat.setIdCategorie(0);
+//            cli.setCategorie(cat);
+//            cli.setCredits(0);
+//            cli.setIdentiteClient("");
+//            cli.setLoginClient("");
+//            cli.setPwdClient("");
+        }
+        request.setAttribute("clientR", cli);
+        List<Categorie> lcat = cna.getCategories();
+        request.setAttribute("listeCategoriesR", lcat);
+        return "/client.jsp";
+    }
+    
+    private String validerCompte(HttpServletRequest request) throws Exception {
+        ClientNetArticles cna = new ClientNetArticles();
+        Client cli;
+        if (request.getParameter("id_client") != "")
+        {
+            cli = cna.getClient(Integer.parseInt(request.getParameter("id_client")));
+        } else {
+            cli = new Client();
+            cli.setIdClient(0);
+        }
+        cli.setIdentiteClient(request.getParameter("txtIdentite"));
+        cli.setAdresseClient(request.getParameter("txtAdresse"));
+        cli.setLoginClient(request.getParameter("txtLogin"));
+        cli.setPwdClient(request.getParameter("txtPwd"));
+        cli.setCategorie(cna.getCategorie(Integer.parseInt(request.getParameter("cbCategories"))));
+        cli.setCredits(Integer.parseInt(request.getParameter("txtCredits")));
+        cna.editerCompte(cli);
+        return "/menu.jsp";
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
