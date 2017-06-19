@@ -21,14 +21,14 @@ import javax.jms.TopicSession;
 public class Emetteur {
     @Resource(mappedName = "FabriqueArticles")
     private static ConnectionFactory fabriqueArticles;
-    @Resource(mappedName = "jms/Articles")
+    @Resource(mappedName = "Articles")
     private static Topic messagesArticles;
     private static TopicConnection connection = null;
     private static TopicSession session = null;
     private static TopicPublisher producteur = null;
     private static MapMessage mapMessage  = null;
     
-    public void sendMessage(String titreArticle, Date date, int idAuteur, String identiteAuteur) throws Exception {
+    public static void sendMessage(String titreArticle, Date date, int idAuteur, String identiteAuteur) throws Exception {
         try {
             connection = (TopicConnection) fabriqueArticles.createConnection();
             session = connection.createTopicSession(false, 0);
