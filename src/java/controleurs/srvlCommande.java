@@ -10,15 +10,14 @@ import dao.Achete;
 import dao.AchetePK;
 import dao.Article;
 import dao.Auteur;
-import dao.Client;
 import dao.ClientBanque;
 import dao.Domaine;
 import dao.ClientNetArticles;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,7 +25,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import pkgProducteur.Emetteur;
+import pkgProducteur.EmetteurTopic;
 
 /**
  *
@@ -35,6 +34,8 @@ import pkgProducteur.Emetteur;
 @WebServlet(name = "srvlCommande", urlPatterns = {"/srvlCommande"})
 public class srvlCommande extends HttpServlet {
     private String erreur;
+    @EJB
+    private EmetteurTopic emetteur;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -202,7 +203,6 @@ public class srvlCommande extends HttpServlet {
                 Integer montantint = (int)Math.round(montantTotal);
                 if (cb.autoriserPaiement(idUser.toString(),montantint.toString()))
                 {
-                    Emetteur emetteur = new Emetteur();
                     for(Article a : lArticle)
                     {
                         AchetePK apk = new AchetePK();
